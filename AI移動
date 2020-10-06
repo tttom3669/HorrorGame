@@ -1,0 +1,31 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+
+public class Mover : MonoBehaviour
+{
+    [Tooltip("最大移動速度")]
+    [SerializeField] float maxSpeed = 6f;
+    NavMeshAgent navmeshAgent;
+    private void Awake()
+    {
+        navmeshAgent = GetComponent<NavMeshAgent>();
+    }
+
+    public void MoveTo(Vector3 destination, float speedRatio)
+    {
+        navmeshAgent.isStopped = false;
+        //限制最大速度
+        navmeshAgent.speed = maxSpeed * Mathf.Clamp01(speedRatio);
+        //前進方向
+        navmeshAgent.destination = destination;
+    }
+
+    public void CancelMove()
+    {
+        //停止導航系統
+        navmeshAgent.isStopped = true;
+    }
+}
