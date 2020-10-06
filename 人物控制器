@@ -1,0 +1,63 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    public CharacterController controller;
+    //移動到的目標位置
+    Vector3 targetMovement;
+    [Tooltip("移動速度")]
+    public float MoveSpeed = 20;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        controller = GetComponent<CharacterController>();
+    }
+    private void Update()
+    {
+        MoveBehaviour();
+    }
+    //處理移動
+    private void MoveBehaviour()
+    {
+        targetMovement = Vector3.zero;
+        targetMovement += GetMove().z * GetCameraForward();//處理前後移動
+        targetMovement += GetMove().x * GetCameraRight();//處理左右移動
+        //避免對角線超過1
+        //ClampMagnitude(vector3,最大值)
+        targetMovement = Vector3.ClampMagnitude(targetMovement, 1);
+        controller.Move(targetMovement * Time.deltaTime * MoveSpeed);
+    }
+    //取得移動值
+    public Vector3 GetMove()
+    {
+        if (Cursor.lockState == CursorLockMode.Locked)
+        {
+            //取得垂直軸(z軸)的移動(W,S);取得平行軸(x軸)的移動(A,D)
+            Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+            //將向量長度(移動輸入)限制最大幅度1，否則對角線移動可能會超過定義的最大移動速度
+            move = Vector3.ClampMagnitude(move, 1);
+            return move;
+        }
+        return Vector3.zero;
+    }
+    //取得目前相機的正方方向
+    private Vector3 GetCameraForward()
+    {
+        Vector3 CameraForward = Camera.main.transform.forward;
+        CameraForward.y = 0;//只朝向正前方
+        CameraForward.Normalize();//歸一化，向量長度最大不超過1
+        return CameraForward;
+    }
+    //取得目前相機的右方方向
+    private Vector3 GetCameraRight()
+    {
+        Vector3 CameraRight = Camera.main.transform.right;
+        CameraRight.y = 0;
+        CameraRight.Normalize();
+        return CameraRight;
+    }
+}
