@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class FirstPersonCamera : MonoBehaviour
 {
-    [Tooltip("Camera跟隨目標")]
-    public Transform target;
     //方向靈敏度
     [Tooltip("水平軸靈敏度")]
     public float sensitivity_X = 2;
@@ -60,4 +58,3 @@ public class FirstPersonCamera : MonoBehaviour
     }
     
 }
-
