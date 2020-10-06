@@ -33,6 +33,13 @@ public class AIController : MonoBehaviour
     //距離上次抵達WayPoint的時間
     float timeSinceArriveWaypoint = 0;
 
+    //要攻擊的目標
+    public Transform Target;
+    //扇形距離 攻擊距離  扇形的半徑 
+    private float SectorDistance = 10;
+    //扇形的角度 也就是攻擊的角度
+    private float SectorAngle = 60;
+
     private void Awake()
     {
         mover = GetComponent<Mover>();
@@ -41,7 +48,8 @@ public class AIController : MonoBehaviour
     }
     private void Update()
     {
-        if (IsInRange())//玩家在追趕範圍內
+        
+        if (IsInRange() || InSectorRange())//玩家在追趕範圍內
         {
             timeSinceLastSawPlayer = 0;
             //移動到player前方
@@ -127,4 +135,25 @@ public class AIController : MonoBehaviour
         //以怪物為中心畫出追趕範圍
         Gizmos.DrawWireSphere(transform.position, chaseDistance);
     }
+
+    public bool InSectorRange()
+    {
+        //與敵人的距離
+        float distance = Vector3.Distance(transform.position, Target.position);
+        //玩家正前方的向量
+        Vector3 norVec = transform.rotation * Vector3.forward;
+        //玩家與敵人的方向向量
+        Vector3 temVec = Target.position - transform.position;
+        //求兩個向量的夾角
+        float Angle = Mathf.Acos(Vector3.Dot(norVec.normalized, temVec.normalized)) * Mathf.Rad2Deg;
+        if (distance < SectorDistance)
+        {
+            if (Angle <= SectorAngle * 0.5f)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
+
