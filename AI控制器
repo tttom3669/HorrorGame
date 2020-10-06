@@ -69,9 +69,9 @@ public class AIController : MonoBehaviour
             {
                 mover.CancelMove();
                 timeSinceArriveWaypoint = 0;
-                currentWaypointIndex = patrol.GetNextWayPointNumber(currentWaypointIndex);
+                currentWaypointIndex = patrol.GetNextWayPointNumber(currentWaypointIndex);//取得下一點位置
             }
-            if (timeSinceArriveWaypoint > waypointToWaitTime)
+            if (timeSinceArriveWaypoint > waypointToWaitTime)//在路徑點待超過一定時間，前往下一點
             {
                 mover.MoveTo(patrol.GetWayPointPosition(currentWaypointIndex), patrolSpeedRatio);
             }
@@ -85,6 +85,7 @@ public class AIController : MonoBehaviour
     //檢查是否已經抵達WaitPoint
     private bool IsAtWaitPoint()
     {
+        //怪物和路徑點的距離夠近時，回傳true，否則傳false
         return (Vector3.Distance(transform.position, patrol.GetWayPointPosition(currentWaypointIndex)) < waypointToStay);
     }
 
@@ -100,8 +101,10 @@ public class AIController : MonoBehaviour
     //是否小於追趕距離內
     private bool IsInRange()
     {
-        return Vector3.Distance(transform.position, player.transform.position) < chaseDistance;//兩者之間的距離
+        //兩者之間的距離小於追趕距離，回傳true，否則傳false
+        return Vector3.Distance(transform.position, player.transform.position) < chaseDistance;
     }
+    //計時器
     private void UpdateTimer()
     {
         timeSinceLastSawPlayer += Time.deltaTime;
@@ -121,6 +124,7 @@ public class AIController : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
+        //以怪物為中心畫出追趕範圍
         Gizmos.DrawWireSphere(transform.position, chaseDistance);
     }
 }
