@@ -19,9 +19,8 @@ public class FirstPersonCamera : MonoBehaviour
     [Tooltip("最大垂直角度")]
     public float maxVerticalAngle = 60;
 
-    public Vector3 offset;
-    float mouse_X = 0;
-    float mouse_Y = 0;
+    float mouse_X = 0;//初始水平軸角度
+    float mouse_Y = 0;//初始垂直軸角度
 
     private void Awake()
     {
@@ -30,30 +29,11 @@ public class FirstPersonCamera : MonoBehaviour
         //是否顯示游標
         Cursor.visible = false;
     }
-    
 
-   //Vecto3.*** or new Vector3(座標),小數需加f
-   // public Vector3 Vec3_MovePos = new Vector3(0, 0.5f, 0);
-
-    // Start is called before the first frame update
-    void Start()
+    private void LateUpdate()
     {
-        //設定初始位置
-        transform.position = target.position+Vector3.up*offset.y;//設定位置
-        //Rigidbody rigidbody = GetComponent<Rigidbody>();
-        //if (rigidbody)
-        //{
-        //    rigidbody.freezeRotation = true;
-        //}
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //設定初始位置
-        transform.position = target.position + Vector3.up * offset.y;//設定位置
         CheckCursorState();
+
         if (Cursor.lockState == CursorLockMode.Locked)
         {
             //根據滑鼠移動的快慢（增量），獲得相機左右旋轉的角度（處理X）
@@ -66,15 +46,11 @@ public class FirstPersonCamera : MonoBehaviour
             transform.rotation = Quaternion.Euler(-mouse_Y, mouse_X, 0);
         }
     }
-
-
-    private void LateUpdate()
-    {
-   
-    }
+    //檢查游標狀態
     private void CheckCursorState()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        //透過Escape改變Cursor狀態
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (Cursor.lockState == CursorLockMode.None)
                 Cursor.lockState = CursorLockMode.Locked;
@@ -84,3 +60,4 @@ public class FirstPersonCamera : MonoBehaviour
     }
     
 }
+
