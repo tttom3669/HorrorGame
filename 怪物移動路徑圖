@@ -1,0 +1,34 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PatrolPath : MonoBehaviour
+{
+    [Header("waypoint的半徑")]
+    [SerializeField] float wayPointGizomsRadius = 0.5f;
+    //取得下一個waypoint編號
+    public int GetNextWayPointNumber(int wayPointNumber)
+    {
+        if (wayPointNumber + 1 > transform.childCount - 1)
+        {
+            return 0;
+        }
+        return wayPointNumber + 1;
+    }
+    //取得waypoint位置
+    public Vector3 GetWayPointPosition(int wayPointNumber)
+    {
+        return transform.GetChild(wayPointNumber).position;
+    }
+    //繪製visable可視化物件，用來設計路徑圖
+    private void OnDrawGizmos()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Gizmos.color = Color.green;
+            int j = GetNextWayPointNumber(i);
+            Gizmos.DrawLine(GetWayPointPosition(i), GetWayPointPosition(j));//畫出waypoint的連線
+            Gizmos.DrawSphere(GetWayPointPosition(i), wayPointGizomsRadius);//畫出waypoint的範圍
+        }
+    }
+}
