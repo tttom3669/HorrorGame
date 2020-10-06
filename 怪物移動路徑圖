@@ -9,6 +9,8 @@ public class PatrolPath : MonoBehaviour
     //取得下一個waypoint編號
     public int GetNextWayPointNumber(int wayPointNumber)
     {
+        //wayPointNumber:0開始，超過最後一點則回傳0
+        //transform.childCount:1開始，數量-1為wayPointNumber最後一數                      
         if (wayPointNumber + 1 > transform.childCount - 1)
         {
             return 0;
