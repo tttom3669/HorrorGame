@@ -9,13 +9,20 @@ public class PatrolPath : MonoBehaviour
     //取得下一個waypoint編號
     public int GetNextWayPointNumber(int wayPointNumber)
     {
-        //wayPointNumber:0開始，超過最後一點則回傳0
-        //transform.childCount:1開始，數量-1為wayPointNumber最後一數                      
-        if (wayPointNumber + 1 > transform.childCount - 1)
+        //wayPointNumber:0開始，超過最後一點則回傳0號
+        //transform.childCount:1開始，數量-1為wayPointNumber                       
+        //if (wayPointNumber + 1 > transform.childCount - 1)
+        //{
+        //    return 0;
+        //}
+        //return wayPointNumber + 1;
+        //隨機回傳點
+        if (Random.Range(0, transform.childCount) == wayPointNumber)
         {
             return 0;
         }
-        return wayPointNumber + 1;
+        return Random.Range(0, transform.childCount);
+        
     }
     //取得waypoint位置
     public Vector3 GetWayPointPosition(int wayPointNumber)
@@ -34,3 +41,4 @@ public class PatrolPath : MonoBehaviour
         }
     }
 }
+
